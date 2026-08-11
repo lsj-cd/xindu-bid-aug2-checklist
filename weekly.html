@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>新都区招投标信息筛选 8月第二周 | 新都云中台</title>
+<style>
+:root{--bg:#0a0e1a;--card:#131a2e;--card2:#1a2340;--border:#2a3654;--hover:#1e2b4a;--text:#e2e8f0;--muted:#64748b;--accent:#38bdf8;--accent2:#818cf8;--green:#22c55e;--yellow:#eab308;--blue:#3b82f6;--purple:#a855f7;--red:#ef4444}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Microsoft YaHei','PingFang SC',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+/* Header */
+.header{background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#0c1e3a 100%);border-bottom:1px solid var(--border);padding:28px 0 20px;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at top right,rgba(56,189,248,.08),transparent 60%),radial-gradient(ellipse at bottom left,rgba(129,140,248,.06),transparent 60%)}
+.header-inner{max-width:1200px;margin:0 auto;padding:0 24px;position:relative}
+.header h1{font-size:24px;font-weight:700;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+.header .sub{font-size:13px;color:var(--muted)}
+.header .meta{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap}
+.header .meta span{font-size:12px;color:var(--muted);background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.2);border-radius:6px;padding:3px 10px}
+/* Stats */
+.stats{max-width:1200px;margin:20px auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;text-align:center}
+.stat .num{font-size:28px;font-weight:700;font-family:'SF Mono',monospace}
+.stat .lbl{font-size:12px;color:var(--muted);margin-top:2px}
+.stat.s-total .num{color:var(--accent)}
+.stat.s-gk .num{color:var(--green)}
+.stat.s-yg .num{color:var(--yellow)}
+.stat.s-zb .num{color:var(--blue)}
+.stat.s-cg .num{color:var(--purple)}
+/* Controls */
+.controls{max-width:1200px;margin:0 auto 16px;padding:0 24px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.search-box{flex:1;min-width:240px;position:relative}
+.search-box input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 14px 10px 38px;color:var(--text);font-size:13px;font-family:inherit;outline:none;transition:border-color .2s}
+.search-box input:focus{border-color:var(--accent)}
+.search-box input::placeholder{color:var(--muted)}
+.search-box svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--muted)}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.filter-btn{font-size:12px;padding:6px 14px;border-radius:999px;border:1px solid var(--border);background:var(--card);color:var(--muted);cursor:pointer;transition:all .2s;font-family:inherit;white-space:nowrap}
+.filter-btn:hover{border-color:var(--accent);color:var(--text)}
+.filter-btn.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;font-weight:600}
+/* Table */
+.table-wrap{max-width:1200px;margin:0 auto;padding:0 24px 60px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--card2);color:var(--accent);padding:12px 14px;text-align:left;font-weight:600;border-bottom:2px solid var(--border);white-space:nowrap;position:sticky;top:0}
+tbody tr{background:var(--card);border-bottom:1px solid var(--border);transition:background .15s}
+tbody tr:hover{background:var(--hover)}
+tbody td{padding:10px 14px;vertical-align:middle;line-height:1.5}
+td.col-seq{width:50px;text-align:center;color:var(--muted);font-family:'SF Mono',monospace}
+td.col-title{min-width:200px;max-width:400px}
+td.col-title a{color:var(--accent);text-decoration:none;font-weight:500}
+td.col-title a:hover{text-decoration:underline}
+td.col-type{width:90px;text-align:center;white-space:nowrap}
+td.col-date{width:100px;white-space:nowrap;color:var(--muted);font-family:'SF Mono',monospace;font-size:12px}
+td.col-kw{width:120px;font-size:12px}
+td.col-summary{min-width:200px;max-width:320px;font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:260px}
+td.col-source{width:140px;font-size:12px;color:var(--muted)}
+td.col-link{width:80px;text-align:center}
+td.col-link a{display:inline-block;font-size:12px;padding:4px 12px;border-radius:6px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;text-decoration:none;font-weight:600;transition:opacity .2s;white-space:nowrap}
+td.col-link a:hover{opacity:.85}
+/* Tags */
+.tag{display:inline-block;font-size:11px;padding:2px 9px;border-radius:999px;font-weight:600;white-space:nowrap}
+.tag-gk{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+.tag-yg{background:rgba(234,179,8,.12);color:var(--yellow);border:1px solid rgba(234,179,8,.3)}
+.tag-zb{background:rgba(59,130,246,.12);color:var(--blue);border:1px solid rgba(59,130,246,.3)}
+.tag-cg{background:rgba(168,85,247,.12);color:var(--purple);border:1px solid rgba(168,85,247,.3)}
+.tag-dy{background:rgba(234,179,8,.12);color:var(--yellow);border:1px solid rgba(234,179,8,.3)}
+.kw-chip{display:inline-block;font-size:11px;padding:1px 7px;border-radius:4px;background:rgba(56,189,248,.08);color:var(--accent);margin:1px;border:1px solid rgba(56,189,248,.15)}
+/* Footer */
+.footer{max-width:1200px;margin:0 auto;padding:0 24px 40px;text-align:center;font-size:12px;color:var(--muted)}
+.footer a{color:var(--accent);text-decoration:none}
+.footer a:hover{text-decoration:underline}
+/* Empty */
+.empty{text-align:center;padding:60px 20px;color:var(--muted);font-size:14px}
+/* Responsive */
+@media(max-width:768px){
+  .header-inner,.stats,.controls,.table-wrap,.footer{padding-left:16px;padding-right:16px}
+  td.col-summary{display:none}
+  td.col-source{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <h1>新都区招投标信息筛选 · 8月第二周</h1>
+    <div class="sub">中国电信成都分公司新都区云中台 · 招投标信息周报</div>
+    <div class="meta">
+      <span>📅 2026-07-26 ~ 2026-08-07</span>
+      <span>🔍 18个IT关键词匹配</span>
+      <span>📊 共12条有效项目</span>
+      <span>🏢 新都云中台</span>
+    </div>
+  </div>
+</div>
+
+<div class="stats" id="stats"></div>
+
+<div class="controls">
+  <div class="search-box">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="search" placeholder="搜索标题 / 关键词 / 来源 / 摘要...">
+  </div>
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-type="all">全部</button>
+    <button class="filter-btn" data-type="招标公告">招标公告</button>
+    <button class="filter-btn" data-type="招标预告">预告/调研</button>
+    <button class="filter-btn" data-type="中标结果">中标结果</button>
+    <button class="filter-btn" data-type="采购公告">采购公告</button>
+  </div>
+</div>
+
+<div class="table-wrap">
+  <table id="table">
+    <thead>
+      <tr>
+        <th>序号</th>
+        <th>项目标题</th>
+        <th>类型</th>
+        <th>发布时间</th>
+        <th>关键词</th>
+        <th>内容摘要</th>
+        <th>来源</th>
+        <th>投标分析</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  <div class="empty" id="empty" style="display:none">没有匹配的项目</div>
+</div>
+
+<div class="footer">
+  <p>新都云中台 · 招投标信息筛选周报 · 2026年8月第二周</p>
+  <p style="margin-top:4px">数据来源：千里马招标网、西南石油大学采购中心、各采购单位官网</p>
+</div>
+
+<script>
+const data = [
+  {seq:"1",title:"成都市新都区中医医院弱电系统及网络设备维保服务采购项目招标公告",type:"招标公告",typeCls:"tag-gk",date:"2026-08-07",kw:"网络",summary:"成都市新都区中医医院弱电系统及网络设备维保服务采购项目招标公告",source:"千里马招标网",link:"https://lsj-cd.github.io/xindu-bid-aug2-checklist/xdqzyy-rdwx/index.html"},
+  {seq:"2",title:"成都市新都区第三人民医院2027年网络安全保障服务项目调研公告",type:"招标预告",typeCls:"tag-yg",date:"2026-08-07",kw:"网络安全、网络",summary:"招标预告，采购公告人民医院网络安全保障",source:"千里马招标网",link:"https://lsj-cd.github.io/xindu-bid-aug2-checklist/xd3yy-2027wl/index.html"},
+  {seq:"3",title:"成都市新都区第三人民医院2027年网络安全等级保护及商用密码测评服务项目调研公告",type:"招标预告",typeCls:"tag-yg",date:"2026-08-07",kw:"网络安全、网络",summary:"采购公告成都市新都区第三人民医院2027年网络安全等级保护及商用密码测评",source:"千里马招标网",link:"https://lsj-cd.github.io/xindu-bid-aug2-checklist/xd3yy-2027db/index.html"},
+  {seq:"4",title:"西南石油大学2026年即时通讯服务项目竞争性磋商采购公告",type:"招标公告",typeCls:"tag-gk",date:"2026-08-07",kw:"通信",summary:"即时通讯服务采购，预算24万元，竞争性磋商，8月20日开标",source:"西南石油大学",link:"https://lsj-cd.github.io/xindu-bid-aug2-checklist/swpu-jstx/index.html"},
+  {seq:"5",title:"四川省革命伤残军人休养院院区视频监控扩容及新增点位设备采购项目调研公告",type:"招标预告",typeCls:"tag-yg",date:"2026-08-06",kw:"网络",summary:"院区监控扩容+一键报警及公安联网，含计算机网络工程",source:"四川省革命伤残军人休养院",link:"https://lsj-cd.github.io/xindu-bid-aug2-checklist/gmscjryy-jk/index.html"},
+  {seq:"6",title:"西南石油大学2026年网络安全运维服务项目(二次)中标（成交）结果公告",type:"中标结果",typeCls:"tag-zb",date:"2026-08-05",kw:"网络安全、网络",summary:"西南石油大学2026年网络安全运维服务项目(二次)中标（成交）结果",source:"千里马招标网",link:"https://lsj-cd.github.io/xindu-bid-aug2-checklist/swpu-wlaqyw/index.html"},
+  {seq:"—",title:"2026年保卫处监控设备采购项目（政采意向第21批）",type:"采购公告",typeCls:"tag-cg",date:"2026-07-31",kw:"监控",summary:"监控设备采购含摄像机存储交换机预算180万",source:"西南石油大学",link:"https://lsj-cd.github.io/xindu-bid-aug2-checklist/swpu-bjc-jk/index.html"},
+  {seq:"—",title:"城市展厅光纤隐蔽加密设备采购项目采购公告",type:"采购公告",typeCls:"tag-cg",date:"2026-07-31",kw:"网络",summary:"光纤隐蔽加密设备采购预算197.98万元",source:"成都复新智创科技有限责任公司（新投集团）",link:"https://lsj-cd.github.io/xindu-bid-aug2-checklist/city-gg-gq/index.html"},
+  {seq:"7",title:"成都市新都区人民医院心电平台运维服务调研公告",type:"调研公告",typeCls:"tag-dy",date:"2026-08-03",kw:"网络",summary:"成都市新都区人民医院心电平台运维服务调研公告",source:"成都市新都区人民医院",link:"https://lsj-cd.github.io/xindu-bid-aug2-checklist/xdqrmyy-xd/index.html"},
+  {seq:"8",title:"成都市新都区第三人民医院2026年网络安全等级保护及商用密码测评服务采购项目",type:"招标预告",typeCls:"tag-yg",date:"2026-07-30",kw:"网络安全、网络",summary:"成都市新都区第三人民医院2026年网络安全等级保护及商用密码测评",source:"千里马招标网",link:"https://lsj-cd.github.io/xindu-bid-aug2-checklist/xd3yy-2026db/index.html"},
+  {seq:"9",title:"成都市新都区人民医院办公软件场地授权服务调研公告",type:"调研公告",typeCls:"tag-dy",date:"2026-07-30",kw:"5G",summary:"成都市新都区人民医院办公软件场地授权服务调研公告",source:"成都市新都区人民医院",link:"https://lsj-cd.github.io/xindu-bid-aug2-checklist/xdqrmyy-bg/index.html"},
+  {seq:"10",title:"成都航空职业技术大学新都校区转化楼网络配套设施采购项目询价采购成交结果公告",type:"中标结果",typeCls:"tag-zb",date:"2026-07-26",kw:"网络",summary:"成都航空职业技术大学新都校区转化楼网络配套设施采购项目询价采购成交结果",source:"千里马招标网",link:"https://lsj-cd.github.io/xindu-bid-aug2-checklist/cdhkzy-ggwl/index.html"},
+];
+
+const typeLabels = {"招标公告":"招标公告","招标预告":"预告/调研","中标结果":"中标结果","采购公告":"采购公告","调研公告":"预告/调研"};
+const typeGroup = {"招标公告":"招标公告","招标预告":"预告/调研","中标结果":"中标结果","采购公告":"采购公告","调研公告":"预告/调研"};
+
+// Stats
+function renderStats(){
+  const total = data.length;
+  const gk = data.filter(d=>typeGroup[d.type]==="招标公告").length;
+  const yg = data.filter(d=>typeGroup[d.type]==="预告/调研").length;
+  const zb = data.filter(d=>typeGroup[d.type]==="中标结果").length;
+  const cg = data.filter(d=>typeGroup[d.type]==="采购公告").length;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat s-total"><div class="num">${total}</div><div class="lbl">筛选项目</div></div>
+    <div class="stat s-gk"><div class="num">${gk}</div><div class="lbl">招标公告</div></div>
+    <div class="stat s-yg"><div class="num">${yg}</div><div class="lbl">预告/调研</div></div>
+    <div class="stat s-zb"><div class="num">${zb}</div><div class="lbl">中标结果</div></div>
+    <div class="stat s-cg"><div class="num">${cg}</div><div class="lbl">采购公告</div></div>
+  `;
+}
+
+function kwChips(kw){
+  return kw.split(/[、,，]/).map(k=>`<span class="kw-chip">${k.trim()}</span>`).join('');
+}
+
+function render(filterType, query){
+  const tbody = document.getElementById('tbody');
+  const empty = document.getElementById('empty');
+  let filtered = data;
+  if(filterType && filterType!=="all"){
+    filtered = filtered.filter(d=>typeGroup[d.type]===filterType);
+  }
+  if(query){
+    const q = query.toLowerCase();
+    filtered = filtered.filter(d=>
+      d.title.toLowerCase().includes(q) ||
+      d.kw.toLowerCase().includes(q) ||
+      d.source.toLowerCase().includes(q) ||
+      d.summary.toLowerCase().includes(q)
+    );
+  }
+  if(filtered.length===0){
+    tbody.innerHTML='';
+    empty.style.display='block';
+    return;
+  }
+  empty.style.display='none';
+  tbody.innerHTML = filtered.map(d=>`
+    <tr>
+      <td class="col-seq">${d.seq}</td>
+      <td class="col-title">${d.title}</td>
+      <td class="col-type"><span class="tag ${d.typeCls}">${d.type}</span></td>
+      <td class="col-date">${d.date}</td>
+      <td class="col-kw">${kwChips(d.kw)}</td>
+      <td class="col-summary" title="${d.summary}">${d.summary}</td>
+      <td class="col-source">${d.source}</td>
+      <td class="col-link"><a href="${d.link}" target="_blank">查看</a></td>
+    </tr>
+  `).join('');
+}
+
+let curFilter = 'all';
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    curFilter = btn.dataset.type;
+    render(curFilter, document.getElementById('search').value);
+  });
+});
+
+document.getElementById('search').addEventListener('input', e=>{
+  render(curFilter, e.target.value);
+});
+
+renderStats();
+render('all','');
+</script>
+
+</body>
+</html>
